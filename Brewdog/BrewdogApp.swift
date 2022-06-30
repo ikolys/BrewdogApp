@@ -11,7 +11,7 @@ import SwiftUI
 struct BrewdogApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AllBeersView()
         }
     }
 }
