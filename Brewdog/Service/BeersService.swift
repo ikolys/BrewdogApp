@@ -12,11 +12,22 @@ protocol BeersService {
     func beersPublisher() -> AnyPublisher<[Beer], Never>
 }
 
+protocol URLSessionProtocol {
+    func dataTaskPublisher(for url: URL) -> URLSession.DataTaskPublisher
+}
+
+extension URLSession: URLSessionProtocol {}
+
 class PunkapiBeersService: BeersService {
-    let url = URL(string: "https://api.punkapi.com/v2/beers?abv_gt=6")!
+    private let urlSession: URLSessionProtocol
+    private let url = URL(string: "https://api.punkapi.com/v2/beers?abv_gt=9")!
+
+    init(urlSession: URLSessionProtocol = URLSession.shared) {
+        self.urlSession = urlSession
+    }
 
     func beersPublisher() -> AnyPublisher<[Beer], Never> {
-        URLSession.shared
+        urlSession
             .dataTaskPublisher(for: url)
             .map { $0.data }
             .decode(type: [ServiceBeerResponse].self, decoder: JSONDecoder())

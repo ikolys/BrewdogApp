@@ -9,10 +9,11 @@ import SwiftUI
 
 struct BeerRowView: View {
     let beer: Beer
+    let image: UIImage
 
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
-            Image(uiImage: beer.image())
+            Image(uiImage: image)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 64, height: 64)
@@ -25,21 +26,6 @@ struct BeerRowView: View {
                 Text("\(beer.abv)")
                     .font(.system(size: 14))
             }
-        }
-    }
-}
-
-extension Beer {
-    func image() -> UIImage {
-        let fallbackImage = UIImage(systemName: "photo.circle")!
-        do {
-            let imageData = try Data(contentsOf: URL(string: imageUrl)!)
-            guard let image = UIImage(data: imageData) else {
-                return fallbackImage
-            }
-            return image
-        } catch {
-            return fallbackImage
         }
     }
 }

@@ -12,11 +12,26 @@ struct AllBeersView: View {
 
     var body: some View {
         NavigationView {
-            List(viewModel.beers, id: \.self) { beer in
-                NavigationLink(destination: BeerDetailsView(beer: beer)) {
-                    BeerRowView(beer: beer)
+            ZStack {
+                List(viewModel.beersData, id: \.self) { beerData in
+                    NavigationLink(destination: BeerDetailsView(beer: beerData.beer, image: beerData.image)) {
+                        BeerRowView(beer: beerData.beer, image: beerData.image)
+                    }
                 }
+                ProgressView("Loading")
+                    .progressViewStyle(.circular)
+                    .isHidden(!viewModel.isLoading)
             }.navigationBarTitle("Some beers...")
+        }
+    }
+}
+
+extension View {
+    @ViewBuilder func isHidden(_ isHidden: Bool) -> some View {
+        if isHidden {
+            self.hidden()
+        } else {
+            self
         }
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BeerDetailsView: View {
     let beer: Beer
+    let image: UIImage
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -19,7 +20,7 @@ struct BeerDetailsView: View {
                     VStack(alignment: .center, spacing: 8) {
                         Text(beer.name)
                             .font(.system(size: 24).bold())
-                        Image(uiImage: beer.image())
+                        Image(uiImage: image)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 144, height: 144)

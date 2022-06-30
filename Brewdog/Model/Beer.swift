@@ -15,6 +15,7 @@ struct Beer: Hashable {
     let methods: [Method]
     let malts: [Malt]
     let hops: [Hop]
+    lazy var image = getImage()
 
     struct Method: Hashable {
         let name: String
@@ -43,9 +44,9 @@ struct Beer: Hashable {
         self.imageUrl = serviceResponse.imageUrl
         self.abv = serviceResponse.abv
         self.description = serviceResponse.description
-        self.methods = serviceResponse.method.keys.map { Method(name: $0)}
-        self.malts = Beer.parseMalts(from: serviceResponse)
-        self.hops = Beer.parseHops(from: serviceResponse)
+        self.methods = serviceResponse.method.keys.map { Method(name: $0)}.removingDuplicates()
+        self.malts = Beer.parseMalts(from: serviceResponse).removingDuplicates()
+        self.hops = Beer.parseHops(from: serviceResponse).removingDuplicates()
     }
 
     private static func parseMalts(from serviceResponse: ServiceBeerResponse) -> [Malt] {
@@ -75,3 +76,12 @@ struct ServiceBeerResponse: Decodable {
     }
 }
 
+private extension Array where Element: Equatable {
+    func removingDuplicates() -> Array {
+        return reduce(into: []) { result, element in
+            if !result.contains(element) {
+                result.append(element)
+            }
+        }
+    }
+}
